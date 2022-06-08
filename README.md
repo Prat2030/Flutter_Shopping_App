@@ -1,4 +1,4 @@
-# shopping_app
+# This is my flutter shopping app
 
 A new Flutter project.
 
