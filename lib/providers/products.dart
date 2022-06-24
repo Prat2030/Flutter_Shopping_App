@@ -91,7 +91,9 @@ class Products with ChangeNotifier {
       );
       _items.add(newProduct);
       notifyListeners();
-      // return Future.value();
+    }).catchError((error) {
+      print(error.message);
+      throw error;
     });
   }
 

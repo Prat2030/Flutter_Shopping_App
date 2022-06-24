@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison, prefer_final_fields
+// ignore_for_file: unnecessary_null_comparison, prefer_final_fields, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -106,7 +106,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
     } else {
       Provider.of<Products>(context, listen: false)
           .addProduct(_editedProduct)
-          .then((_) {
+          .catchError((error) {
+        return showDialog<Null>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: Text('An error occured'),
+                  content: Text('Something went wrong!'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Okay'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ));
+      }).then((_) {
         setState(() {
           _isLoading = true;
         });
