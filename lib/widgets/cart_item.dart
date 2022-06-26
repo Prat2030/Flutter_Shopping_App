@@ -4,39 +4,19 @@ import 'package:provider/provider.dart';
 import '../providers/cart.dart';
 
 class CartItem extends StatelessWidget {
-  // const CartItem({Key? key}) : super(key: key);
   final String id;
   final String productId;
-  final String title;
-  final int quantity;
   final double price;
+  final int quantity;
+  final String title;
 
-  CartItem({
-    required this.id,
-    required this.productId,
-    required this.title,
-    required this.quantity,
-    required this.price,
-  });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-//         child: Padding(
-//             padding: EdgeInsets.all(8),
-//             child: ListTile(
-//               leading: Padding(
-//                 padding: EdgeInsets.all(5.0),
-//                 child: FittedBox(child: CircleAvatar(child: Text('\$$price'))),
-//               ),
-//               title: Text(title),
-//               subtitle:
-//                   Text('Total: \$${(price * quantity).toStringAsFixed(2)}'),
-//               trailing: Text('$quantity x'),
-//             )));
-//   }
-// }
+  CartItem(
+    this.id,
+    this.productId,
+    this.price,
+    this.quantity,
+    this.title,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -61,23 +41,25 @@ class CartItem extends StatelessWidget {
         return showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('Are you sure?'),
-            content: Text('Do you want to remove the item from the cart?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('No'),
-                onPressed: () {
-                  Navigator.of(ctx).pop(false);
-                },
+                title: Text('Are you sure?'),
+                content: Text(
+                  'Do you want to remove the item from the cart?',
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(ctx).pop(false);
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                      Navigator.of(ctx).pop(true);
+                    },
+                  ),
+                ],
               ),
-              FlatButton(
-                child: Text('Yes'),
-                onPressed: () {
-                  Navigator.of(ctx).pop(true);
-                },
-              ),
-            ],
-          ),
         );
       },
       onDismissed: (direction) {
