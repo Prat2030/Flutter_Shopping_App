@@ -69,11 +69,11 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     final url = Uri.https(
         'flutter-shopping-app-9de66-default-rtdb.firebaseio.com',
         '/products.json');
-    http
+    return http
         .post(
       url,
       body: json.encode({
@@ -93,7 +93,6 @@ class Products with ChangeNotifier {
         id: json.decode(response.body)['name'],
       );
       _items.add(newProduct);
-      // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
     });
   }
