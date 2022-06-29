@@ -118,7 +118,7 @@ class _AuthCardState extends State<AuthCard> {
               actions: <Widget>[
                 FlatButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(ctx).pop();
                     },
                     child: Text('Okay!'))
               ],
