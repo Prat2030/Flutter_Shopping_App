@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_if_null_operators
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,15 +25,20 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
+        // ChangeNotifierProxyProvider<Auth, Products>(
+        //   update: (ctx, auth, previousProducts) => Products(auth.token,
+        //       previousProducts == null ? [] : previousProducts.items),
+        // ),
         ChangeNotifierProxyProvider<Auth, Products>(
-          update: (ctx, auth, previousProducts) => Products(auth.token,
-              previousProducts == null ? [] : previousProducts.items),
+          create: (ctx) => Products(),
+          update: (ctx, auth, prevProducts) => prevProducts..update(auth.token),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => Orders(),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          update: (ctx, auth, previousOrders) => Orders(
+              auth.token, previousOrders == null ? [] : previousOrders.orders),
         ),
       ],
       child: Consumer<Auth>(

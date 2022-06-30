@@ -45,8 +45,11 @@ class Products with ChangeNotifier {
   ];
   // var _showFavoritesOnly = false;
 
-  final String authToken;
-  Products(this.authToken, this._items);
+  String authToken;
+
+  void update(String token) {
+    authToken = token;
+  }
 
   List<Product> get items {
     // if (_showFavoritesOnly) {
@@ -98,7 +101,7 @@ class Products with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      throw error;
+      throw (error);
     }
   }
 
@@ -157,7 +160,8 @@ class Products with ChangeNotifier {
   Future<void> deleteProduct(String id) async {
     final url = Uri.https(
         'flutter-shopping-app-9de66-default-rtdb.firebaseio.com',
-        '/products/$id.json');
+        '/products/$id.json',
+        {'auth': '$authToken'});
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);

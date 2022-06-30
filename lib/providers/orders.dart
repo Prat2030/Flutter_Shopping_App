@@ -21,6 +21,9 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
+  final String authToken;
+
+  Orders(this.authToken, this._orders);
 
   List<OrderItem> get orders {
     return [..._orders];
@@ -29,7 +32,8 @@ class Orders with ChangeNotifier {
   Future<void> fetchAndSetOrders() async {
     final url = Uri.https(
         'flutter-shopping-app-9de66-default-rtdb.firebaseio.com',
-        '/products.json');
+        '/products.json',
+        {'auth': '$authToken'});
     final response = await http.get(url);
     final List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -40,7 +44,7 @@ class Orders with ChangeNotifier {
       loadedOrders.add(OrderItem(
         id: orderId,
         amount: orderData['amount'],
-        dateTime: orderData['dateTime'],
+        dateTime: DateTime.parse(orderData['dateTime']),
         products: (orderData['products'] as List<dynamic>)
             .map((item) => CartItem(
                 id: item['id'],
@@ -57,7 +61,8 @@ class Orders with ChangeNotifier {
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final url = Uri.https(
         'flutter-shopping-app-9de66-default-rtdb.firebaseio.com',
-        '/products.json');
+        '/products.json',
+        {'auth': '$authToken'});
     final timestamp = DateTime.now();
     final response = await http.post(url,
         body: json.encode({
@@ -75,9 +80,9 @@ class Orders with ChangeNotifier {
     _orders.insert(
       0,
       OrderItem(
-        id: timestamp.toString(),
+        id: json.decode(response.body)['name'],
         amount: total,
-        dateTime: DateTime.now(),
+        dateTime: timestamp,
         products: cartProducts,
       ),
     );
